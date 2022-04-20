@@ -2,10 +2,10 @@
 swagger: "2.0"
 info:
   title: olap
+  version: 1.0.0
   description: Методы управления web-сервисом публикации данных в аналитические СУБД
   contact:
     email: papok@krista.ru
-  version: 1.0.0
 consumes:
 - application/json
 produces:
@@ -13,13 +13,12 @@ produces:
 paths:
   /olap:
     get:
-      tags:
-      - Витрины
-      summary: Список витрин
       consumes:
       - application/json
       produces:
       - application/json
+      tags:
+      - Витрины
       responses:
         "200":
           description: Список витрин
@@ -42,24 +41,24 @@ paths:
             type: string
           examples:
             application/json: '"Неверный запрос"'
+      summary: Список витрин
     parameters:
     - name: search
-      in: query
       description: Возвращает список витрин содержащих в имени текст запроса
+      in: query
       type: string
     - name: uuid
-      in: query
       description: Возвращает инфрмацию по витрине и подключениям с указанным uuid
+      in: query
       type: string
   /olap/{datamart}:
     get:
-      tags:
-      - Витрины
-      summary: Список витрин
       consumes:
       - application/json
       produces:
       - application/json
+      tags:
+      - Витрины
       responses:
         "200":
           description: Список витрин
@@ -82,17 +81,17 @@ paths:
             type: string
           examples:
             application/json: '"Неверный запрос"'
+      summary: Список витрин
     put:
+      consumes: []
       tags:
       - Витрины
-      summary: Обновить параметры витрины
-      consumes: []
       parameters:
       - name: body
-        in: body
-        required: true
         schema:
           $ref: '#/definitions/datamart'
+        in: body
+        required: true
       responses:
         "200":
           description: Данные витрины обновлены
@@ -106,17 +105,17 @@ paths:
             type: string
           examples:
             application/json: '"Неверный запрос"'
+      summary: Обновить параметры витрины
     post:
+      consumes: []
       tags:
       - Витрины
-      summary: Добавить витрину
-      consumes: []
       parameters:
       - name: body
-        in: body
-        required: true
         schema:
           $ref: '#/definitions/datamart'
+        in: body
+        required: true
       responses:
         "201":
           description: Витрина добавлена
@@ -147,10 +146,9 @@ paths:
             type: string
           examples:
             application/json: '"Некорректный запрос"'
+      summary: Добавить витрину
     delete:
-      tags:
-      - Витрины
-      summary: Удалить витрину
+      tags: []
       responses:
         "200":
           description: Объекта нет в системе
@@ -158,60 +156,60 @@ paths:
             type: string
           examples:
             application/json: '"ОК"'
+      summary: Удалить витрину
     parameters:
     - name: datamart
-      in: path
       description: Наименование витрины
+      in: path
       required: true
       type: string
   /olap/{datamart}/period:
     get:
-      tags:
-      - Периоды_витрины
-      summary: Список периодов
       consumes:
       - application/json
       produces:
       - application/json
+      tags:
+      - Периоды_витрины
       responses:
         "200":
           description: Status 200
           schema:
             $ref: '#/definitions/period'
+      summary: Список периодов
     parameters:
     - name: datamart
-      in: path
       description: Наименование витрины
+      in: path
       required: true
       type: string
   /olap/{datamart}/period/{period}:
     get:
-      tags:
-      - Периоды_витрины
-      summary: Список периодов
       consumes:
       - application/json
       produces:
       - application/json
+      tags:
+      - Периоды_витрины
       responses:
         "200":
           description: Status 200
           schema:
             $ref: '#/definitions/period'
+      summary: Список периодов
     post:
-      tags:
-      - Периоды_витрины
-      summary: Добавить период
       consumes:
       - application/json
       produces:
       - application/json
+      tags:
+      - Периоды_витрины
       parameters:
       - name: body
-        in: body
-        required: true
         schema:
           $ref: '#/definitions/datamart'
+        in: body
+        required: true
       responses:
         "200":
           description: Если все периоды добавлены
@@ -221,33 +219,33 @@ paths:
             $ref: '#/definitions/period'
         "400":
           description: Хотя бы один из периодов некорретный
+      summary: Добавить период
     delete:
-      tags:
-      - Периоды_витрины
-      summary: Удалить период
       consumes:
       - application/json
       produces:
       - application/json
+      tags:
+      - Периоды_витрины
       responses:
         "200":
           description: Объекта нет в системе
+      summary: Удалить период
     parameters:
     - name: datamart
-      in: path
       description: Наименование витрины
+      in: path
       required: true
       type: string
     - name: period
-      in: path
       description: Период
+      in: path
       required: true
       type: string
   /olap/{datamart}/request/{request}:
     get:
       tags:
       - SQL-запросы
-      summary: Список и SQL-код запросов
       responses:
         "200":
           description: Список запросов
@@ -256,40 +254,40 @@ paths:
         "400":
           description: "Неверный URL запрос. Например, не существует витрина или з\
             апрос"
+      summary: Список и SQL-код запросов
     put:
-      tags:
-      - SQL-запросы
-      summary: Обновить запрос
       consumes:
       - application/json
       produces:
       - application/json
+      tags:
+      - SQL-запросы
       parameters:
       - name: body
-        in: body
-        required: true
         schema:
           $ref: '#/definitions/request'
+        in: body
+        required: true
       responses:
         "200":
           description: Status 200
         "400":
           description: Некорректный JSON
+      summary: Обновить запрос
     post:
-      tags:
-      - SQL-запросы
-      summary: Добавить запрос
       consumes:
       - application/json
       produces:
       - application/json
+      tags:
+      - SQL-запросы
       parameters:
       - name: body
-        in: body
         description: Во вложении должен быть запрос целиком
-        required: true
         schema:
           $ref: '#/definitions/request'
+        in: body
+        required: true
       responses:
         "200":
           description: Status 200
@@ -302,108 +300,108 @@ paths:
             type: string
           examples:
             application/json: bad body
+      summary: Добавить запрос
     delete:
       tags:
       - SQL-запросы
-      summary: Удалить запрос
       responses:
         "200":
           description: Объекта нет в системе
+      summary: Удалить запрос
     parameters:
     - name: datamart
-      in: path
       description: Наименование витрины
+      in: path
       required: true
       type: string
     - name: request
-      in: path
       description: Название запроса
+      in: path
       required: true
       type: string
   /olap/public/{datamart}/{period}:
     post:
-      tags:
-      - Методы_управления
-      summary: Опубликовать данные
       consumes:
       - application/json
       produces:
       - application/json
+      tags:
+      - Методы_управления
       parameters:
       - name: datamart
-        in: query
         description: Витрина
+        in: query
         required: false
         type: string
       - name: period
-        in: query
         description: Период витрины. Не работает без указания витрины
+        in: query
         required: false
         type: string
       responses:
         "200":
           description: Status 200
+      summary: Опубликовать данные
     parameters:
     - name: datamart
-      in: path
       description: Наименовани витрины
+      in: path
       required: true
       type: string
     - name: period
-      in: path
       description: Период витрины. Перечисление через запятую
+      in: path
       required: true
       type: string
   /olap/rebild/{datamart}:
     post:
       tags:
       - Методы_управления
-      summary: Перестроить целевую БД
       responses:
         "200":
           description: Status 200
+      summary: Перестроить целевую БД
     parameters:
     - name: datamart
-      in: path
       description: Наименовани витрины
+      in: path
       required: true
       type: string
   /olap/sync/{datamart}:
     post:
       tags:
       - Методы_управления
-      summary: Синхронизировать структуру с целевой БД
-      description: Если вызвать запрос без параметров то будут созданы все таблицы
-        на всех целевых БД для всех витрин
       parameters:
       - name: datamart
-        in: query
         description: "Наименование витрины, создаст на всех серверах"
+        in: query
         required: false
         type: string
       responses:
         "200":
           description: Status 200
+      summary: Синхронизировать структуру с целевой БД
+      description: Если вызвать запрос без параметров то будут созданы все таблицы
+        на всех целевых БД для всех витрин
     parameters:
     - name: datamart
-      in: path
       description: Наименовани витрины
+      in: path
       required: true
       type: string
   /olap/{datamart}/request:
     get:
       tags:
       - SQL-запросы
-      summary: Список и SQL-код запросов
       parameters:
       - name: uuid
-        in: query
         description: uuid конкретного запроса
+        in: query
         required: false
         type: string
       - name: search
-        in: query
         description: Возвращает запросы содердащии в наименование запрос
+        in: query
         required: false
         type: string
       responses:
@@ -414,21 +412,21 @@ paths:
         "400":
           description: "Неверный URL запрос. Например, не существует витрина или з\
             апрос"
+      summary: Список и SQL-код запросов
     parameters:
     - name: datamart
-      in: path
       description: Наименование витрины
+      in: path
       required: true
       type: string
   /olap/task/{datamart}:
     get:
-      tags:
-      - Задачи_публикации
-      summary: Список задач
       consumes:
       - application/json
       produces:
       - application/json
+      tags:
+      - Задачи_публикации
       parameters:
       - name: status
         in: query
@@ -439,25 +437,25 @@ paths:
         - WORK
         - READY
       - name: date
-        in: query
         description: "Период, до которого будет доступен список"
+        in: query
         required: false
         type: string
       responses:
         "200":
           description: Status 200
+      summary: Список задач
     delete:
-      tags:
-      - Задачи_публикации
-      summary: Удалить задачу
       consumes:
       - application/json
       produces:
       - application/json
+      tags:
+      - Задачи_публикации
       parameters:
       - name: uuid
-        in: query
         description: uuid задачи. без указания удаляет все задачи
+        in: query
         required: false
         type: string
       responses:
@@ -465,10 +463,11 @@ paths:
           description: Объекта нет в системе
         "400":
           description: Некорректный запрос
+      summary: Удалить задачу
     parameters:
     - name: datamart
-      in: path
       description: Наименовани витрины
+      in: path
       required: true
       type: string
 definitions:
