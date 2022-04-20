@@ -1,0 +1,615 @@
+---
+swagger: "2.0"
+info:
+  title: olap
+  description: Методы управления web-сервисом публикации данных в аналитические СУБД
+  contact:
+    email: papok@krista.ru
+  version: 1.0.0
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /olap:
+    get:
+      tags:
+      - Витрины
+      summary: Список витрин
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список витрин
+          schema:
+            $ref: '#/definitions/datamart'
+          examples:
+            application/json:
+              destination_connection: some text
+              targetTable: some text
+              datamart: some text
+              updatetime: some text
+              status: some text
+              urlbi: some text
+              uuid: some text
+              source_connection: some text
+              columns: some text
+        "400":
+          description: Неверный запрос в URL
+          schema:
+            type: string
+          examples:
+            application/json: '"Неверный запрос"'
+    parameters:
+    - name: search
+      in: query
+      description: Возвращает список витрин содержащих в имени текст запроса
+      type: string
+    - name: uuid
+      in: query
+      description: Возвращает инфрмацию по витрине и подключениям с указанным uuid
+      type: string
+  /olap/{datamart}:
+    get:
+      tags:
+      - Витрины
+      summary: Список витрин
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список витрин
+          schema:
+            $ref: '#/definitions/datamart'
+          examples:
+            application/json:
+              destination_connection: some text
+              targetTable: some text
+              datamart: some text
+              updatetime: some text
+              status: some text
+              urlbi: some text
+              uuid: some text
+              source_connection: some text
+              columns: some text
+        "400":
+          description: Неверный запрос в URL
+          schema:
+            type: string
+          examples:
+            application/json: '"Неверный запрос"'
+    put:
+      tags:
+      - Витрины
+      summary: Обновить параметры витрины
+      consumes: []
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/datamart'
+      responses:
+        "200":
+          description: Данные витрины обновлены
+          schema:
+            type: string
+          examples:
+            application/json: '"Витрина обновлена"'
+        "400":
+          description: Если некорректный JSON
+          schema:
+            type: string
+          examples:
+            application/json: '"Неверный запрос"'
+    post:
+      tags:
+      - Витрины
+      summary: Добавить витрину
+      consumes: []
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/datamart'
+      responses:
+        "201":
+          description: Витрина добавлена
+          schema:
+            type: string
+          examples:
+            application/json: '"Витрина добавлена"'
+        "208":
+          description: Ошибка когда витрина уже существует. Возвращает существующую
+            витрину
+          schema:
+            $ref: '#/definitions/datamart'
+          examples:
+            application/json:
+              destination_connection: some text
+              targetTable: some text
+              datamart: some text
+              updatetime: some text
+              status: some text
+              urlbi: some text
+              uuid: some text
+              source_connection: some text
+              columns: some text
+        "400":
+          description: Если JSON с ошибками. Например неверный тип полей или не все
+            поля.
+          schema:
+            type: string
+          examples:
+            application/json: '"Некорректный запрос"'
+    delete:
+      tags:
+      - Витрины
+      summary: Удалить витрину
+      responses:
+        "200":
+          description: Объекта нет в системе
+          schema:
+            type: string
+          examples:
+            application/json: '"ОК"'
+    parameters:
+    - name: datamart
+      in: path
+      description: Наименование витрины
+      required: true
+      type: string
+  /olap/{datamart}/period:
+    get:
+      tags:
+      - Периоды_витрины
+      summary: Список периодов
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Status 200
+          schema:
+            $ref: '#/definitions/period'
+    parameters:
+    - name: datamart
+      in: path
+      description: Наименование витрины
+      required: true
+      type: string
+  /olap/{datamart}/period/{period}:
+    get:
+      tags:
+      - Периоды_витрины
+      summary: Список периодов
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Status 200
+          schema:
+            $ref: '#/definitions/period'
+    post:
+      tags:
+      - Периоды_витрины
+      summary: Добавить период
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/datamart'
+      responses:
+        "200":
+          description: Если все периоды добавлены
+        "208":
+          description: Возвращает перечень уже существующих периодов
+          schema:
+            $ref: '#/definitions/period'
+        "400":
+          description: Хотя бы один из периодов некорретный
+    delete:
+      tags:
+      - Периоды_витрины
+      summary: Удалить период
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Объекта нет в системе
+    parameters:
+    - name: datamart
+      in: path
+      description: Наименование витрины
+      required: true
+      type: string
+    - name: period
+      in: path
+      description: Период
+      required: true
+      type: string
+  /olap/{datamart}/request/{request}:
+    get:
+      tags:
+      - SQL-запросы
+      summary: Список и SQL-код запросов
+      responses:
+        "200":
+          description: Список запросов
+          schema:
+            $ref: '#/definitions/request'
+        "400":
+          description: "Неверный URL запрос. Например, не существует витрина или з\
+            апрос"
+    put:
+      tags:
+      - SQL-запросы
+      summary: Обновить запрос
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/request'
+      responses:
+        "200":
+          description: Status 200
+        "400":
+          description: Некорректный JSON
+    post:
+      tags:
+      - SQL-запросы
+      summary: Добавить запрос
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: body
+        in: body
+        description: Во вложении должен быть запрос целиком
+        required: true
+        schema:
+          $ref: '#/definitions/request'
+      responses:
+        "200":
+          description: Status 200
+          schema:
+            type: string
+          examples: {}
+        "400":
+          description: Status 400
+          schema:
+            type: string
+          examples:
+            application/json: bad body
+    delete:
+      tags:
+      - SQL-запросы
+      summary: Удалить запрос
+      responses:
+        "200":
+          description: Объекта нет в системе
+    parameters:
+    - name: datamart
+      in: path
+      description: Наименование витрины
+      required: true
+      type: string
+    - name: request
+      in: path
+      description: Название запроса
+      required: true
+      type: string
+  /olap/public/{datamart}/{period}:
+    post:
+      tags:
+      - Методы_управления
+      summary: Опубликовать данные
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: datamart
+        in: query
+        description: Витрина
+        required: false
+        type: string
+      - name: period
+        in: query
+        description: Период витрины. Не работает без указания витрины
+        required: false
+        type: string
+      responses:
+        "200":
+          description: Status 200
+    parameters:
+    - name: datamart
+      in: path
+      description: Наименовани витрины
+      required: true
+      type: string
+    - name: period
+      in: path
+      description: Период витрины. Перечисление через запятую
+      required: true
+      type: string
+  /olap/rebild/{datamart}:
+    post:
+      tags:
+      - Методы_управления
+      summary: Перестроить целевую БД
+      responses:
+        "200":
+          description: Status 200
+    parameters:
+    - name: datamart
+      in: path
+      description: Наименовани витрины
+      required: true
+      type: string
+  /olap/sync/{datamart}:
+    post:
+      tags:
+      - Методы_управления
+      summary: Синхронизировать структуру с целевой БД
+      description: Если вызвать запрос без параметров то будут созданы все таблицы
+        на всех целевых БД для всех витрин
+      parameters:
+      - name: datamart
+        in: query
+        description: "Наименование витрины, создаст на всех серверах"
+        required: false
+        type: string
+      responses:
+        "200":
+          description: Status 200
+    parameters:
+    - name: datamart
+      in: path
+      description: Наименовани витрины
+      required: true
+      type: string
+  /olap/{datamart}/request:
+    get:
+      tags:
+      - SQL-запросы
+      summary: Список и SQL-код запросов
+      parameters:
+      - name: uuid
+        in: query
+        description: uuid конкретного запроса
+        required: false
+        type: string
+      - name: search
+        in: query
+        description: Возвращает запросы содердащии в наименование запрос
+        required: false
+        type: string
+      responses:
+        "200":
+          description: Список запросов
+          schema:
+            $ref: '#/definitions/request'
+        "400":
+          description: "Неверный URL запрос. Например, не существует витрина или з\
+            апрос"
+    parameters:
+    - name: datamart
+      in: path
+      description: Наименование витрины
+      required: true
+      type: string
+  /olap/task/{datamart}:
+    get:
+      tags:
+      - Задачи_публикации
+      summary: Список задач
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: status
+        in: query
+        required: false
+        type: string
+        enum:
+        - ADD
+        - WORK
+        - READY
+      - name: date
+        in: query
+        description: "Период, до которого будет доступен список"
+        required: false
+        type: string
+      responses:
+        "200":
+          description: Status 200
+    delete:
+      tags:
+      - Задачи_публикации
+      summary: Удалить задачу
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - name: uuid
+        in: query
+        description: uuid задачи. без указания удаляет все задачи
+        required: false
+        type: string
+      responses:
+        "200":
+          description: Объекта нет в системе
+        "400":
+          description: Некорректный запрос
+    parameters:
+    - name: datamart
+      in: path
+      description: Наименовани витрины
+      required: true
+      type: string
+definitions:
+  datamart:
+    description: Витрина и подключение к серверу на котором витрина
+    type: object
+    properties:
+      destination_connection:
+        description: Подключение к серверу БД с витриной
+        type: string
+        example: default:default@fm-pg2:9000/default@ClickHouse
+      targetTable:
+        description: Наименование целевой таблицы
+        type: string
+        example: mesotch
+      datamart:
+        description: Наименование витрины
+        type: string
+        example: chr_fo002_oper_rdb
+      updatetime:
+        description: Время обновления
+        type: string
+        example: 2019-05-04T06:13:35
+      status:
+        description: Статус подключения публикатора
+        enum:
+        - ADD
+        - SYNC
+        - PUBLISHED
+        - ERROR
+        type: string
+      urlbi:
+        description: Подключение к BI
+        type: string
+        example: "http://fmjboss.krista.ru:12480/publisher-manager/webservice,test,test1"
+      uuid:
+        description: uuid
+        type: string
+        example: d2a194d2-7fcd-11e9-bc42-526af7764f64
+      source_connection:
+        description: Подключение к базе источника
+        type: string
+        example: postgresql://postgres:postgres@fmdb1:5432/fns_od_pg
+      columns:
+        description: Поля целевой таблицы
+        type: string
+        example: |-
+          {
+            "summ": "Float64",
+            "acceptdate": "String",
+          ...
+            "tax_name": "String"
+          }
+    example:
+      destination_connection: default:default@fm-pg2:9000/default@ClickHouse
+      targetTable: mesotch
+      datamart: chr_fo002_oper_rdb
+      updatetime: 2019-05-04T06:13:35
+      status: ADD
+      urlbi: "http://fmjboss.krista.ru:12480/publisher-manager/webservice,test,test1"
+      uuid: d2a194d2-7fcd-11e9-bc42-526af7764f64
+      source_connection: postgresql://postgres:postgres@fmdb1:5432/fns_od_pg
+      columns: "summ:float64,acceptdate:string,...,tax_name:string"
+  period:
+    description: Период который может быть добавлен в витрину
+    type: object
+    properties:
+      datamart:
+        description: Наименование витрины
+        type: string
+        example: chr_fo002_oper_rdb
+      period:
+        description: Список периодов через запятую
+        type: string
+        example: "20171001,20171002"
+    example:
+      datamart: chr_fo002_oper_rdb
+      period: "2017,2018,2019"
+  request:
+    description: Запрос выполняемый для публикации данных витрины по одному периоду
+    required: []
+    type: object
+    properties:
+      uuid:
+        description: uuid запроса
+        type: string
+        example: 30f06eb4-7fc9-11e9-bc42-526af7764f64
+      name:
+        description: "Название запроса, обычно по базовой таблице"
+        type: string
+        example: f_r_budget
+      body:
+        description: SQL код запроса
+        type: string
+        example: select * from alpha
+      datamart:
+        description: Наименование витрины
+        type: string
+    example:
+      uuid: 30f06eb4-7fc9-11e9-bc42-526af7764f64
+      name: f_r_budget
+      body: select * from alpha
+      datamart: chr_fo002_oper_rdb
+  task:
+    description: Задача на публикацию данных
+    type: object
+    properties:
+      uuid:
+        description: uuid задачи
+        type: string
+        example: 47396caa-988f-4820-9c8d-84cd4dba0bc4
+      status:
+        description: Статус
+        enum:
+        - ADD
+        - WORK
+        - END
+        - ERROR
+        type: string
+      createTime:
+        description: Дата добавления записи
+        type: string
+      updateTime:
+        description: Дата обновления записи
+        type: string
+        example: 2019-05-25 10:12:36.436
+      period:
+        description: Публикуемый период
+        type: string
+        example: 2019-05-25 10:17:01.439
+      datamartUUID:
+        description: uuid витрины
+        type: string
+        example: d2a194d2-7fcd-11e9-bc42-526af7764f64
+      datamart:
+        description: Наименование витрины
+    example:
+      uuid: 47396caa-988f-4820-9c8d-84cd4dba0bc4
+      status: ADD
+      createTime: 2019-05-25 10:12:36.436
+      updateTime: 2019-05-25 10:17:01.439
+      period: 20170506
+      datamart: d2a194d2-7fcd-11e9-bc42-526af7764f64
+      datamartUuid: d2a194d2-7fcd-11e9-bc42-526af7764f64
